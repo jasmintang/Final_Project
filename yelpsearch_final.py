@@ -105,15 +105,25 @@ def yelpsearch():
                 if i > 9:
                     break
                 key2.append(key[len(key)-i-1])
-
+            # Service 8
+            score_blob
+            rateing_blob = database[name][1]
+            regr = linear_model.LinearRegression()
+            regr.fit(score_blob, rateing_blob)
+            plt.scatter(score_blob, rateing_blob, color='blue')
+            plt.plot(score_blob, regr.predict(score_blob), color='red', linewidth=4)
+            plt.savefig('/static/images/new_plot.png')
 
             return render_template('success.html',
                                    translate=chinese_blob, 
                                    score=score_blob,
+                                   rating = rateing_blob,
                                    adj=sorted_adj,
                                    noun=sorted_noun,
                                    positive=key1,
-                                   negative=key2)
+                                   negative=key2,
+                                   url ='/static/images/new_plot.png'
+                                   )
     
 
         else:

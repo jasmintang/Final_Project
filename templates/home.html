@@ -1,0 +1,187 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <title>Yelp Reviews Library</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+  </head>
+
+  <body>
+
+    <header>
+      <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8 col-md-7 py-4">
+              <h4 class="text-white">About</h4>
+              <p class="text-muted">Group Members: Sijie Wen, Xiaolu Li, Yamin Tang</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="container d-flex justify-content-between">
+          <a href="#" class="navbar-brand d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            <strong>Yelp</strong>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main role="main">
+      <section class="jumbotron text-center">
+        <img src="/static/img/ad.jpg" class="img-responsive" alt="">
+        
+          <h1 class="jumbotron-heading">Yelp Reviews Library</h1>
+      </section>    
+      <section>
+        <div class="container">
+          <div class="p-3 mb-2 bg-light text-dark">
+            <dl class="row">
+              <dt class="col-sm-3">For Name</dt>
+              <dd class="col-sm-9">
+                <p class="lead text-muted">Select the restaurant name on Hoboken.</p>
+                <p class="lead text-muted"><em>For example, Saku, Grand Vin.</em></p>
+              </dd>
+
+              <dt class="col-sm-3">For Service</dt>
+              <dd class="col-sm-9">
+                <p class="lead text-muted">Provide <mark>translate</mark> to get all Chinese reviews of designated restaurant;</p>
+                <p class="lead text-muted">Provide <mark>rate</mark> to get the overall rating based on the sentiment score of all reviews;</p>
+                <p class="lead text-muted">Provide <mark>adj</mark> to get most commonly used adjective words for a restaurant;</p>
+                <p class="lead text-muted">Provide <mark>noun</mark> to get most commonly used noun words for a restaurant;</p>
+                <p class="lead text-muted">Provide <mark>positive</mark> to get top 10 positive noun phrases used for a restaurant;</p>
+                <p class="lead text-muted">Provide <mark>negative</mark> to get top 10 negative noun phrases used for a restaurant.</p>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <div class="album py-5 bg-light">
+        <div class="container">
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mb-12 box-shadow">
+
+                <div class="card-body">
+                    <h1>Please Enter the Restaurant Name: </h1>
+                  <p class="card-text">
+
+                    <form action="" method="post">
+                        
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Name select</label>
+                            <select class="form-control" id="exampleFormControlSelect1" name="name" value="{{request.form.name}}">
+                              <option>--SELECT THE RESTAURANT--</option>
+                              <option>Zack's Oak Bar & Restaurant</option>
+                              <option>Grand Vin</option>
+                              <option>Tutta Pesca</option>
+                              <option>Anthony David's</option>
+                              <option>Antique Bar & Bakery</option>
+                              <option>Saku</option>                
+                              <option>Halifax</option>
+                              <option>Moran's</option>
+                              <option>Seven Valleys</option>
+                              <option>Augustino's</option>
+                              <option>The Cuban Restaurant and Bar</option>
+                              <option>La Isla Restaurant</option>
+                              <option>Orale Mexican Kitchen</option>
+                              <option>La Casa</option>
+                              <option>Otto Strada</option>
+                              <option>Onieals</option>
+                              <option>Barbès Restaurant</option>
+                              <option>Zero Otto Uno Cafe</option>
+                              <option>Panello</option>
+                              <option>Apulia</option>
+                              <option>Ali Baba</option>
+                              <option>Court Street Restaurant & Bar</option>
+                              <option>Greektown</option>
+                              <option>The Wild Son</option>
+                              <option>Amanda's Restaurant</option>
+                              <option>Northern Soul</option>
+                              <option>Union Hall</option>
+                              <option>Tosti Cafe & Kitchen</option>
+                              <option>Del Frisco's Grille</option>
+                              <option>Blue Eyes Restaurant</option>
+                              <option>Fork Hill Kitchen</option>
+                              <option>Sorellina</option>
+                              <option>Elysian Cafe</option>
+                              <option>Margherita's</option>
+                              <option>Gogi Grill - Hoboken</option>
+                              <option>The Brass Rail</option>
+                              <option>Stingray Lounge</option>
+                              <option>Rosticeria Da Gigi</option>
+                              <option>Corto</option>
+                              <option>The Hutton</option>
+                              <option>RH Rooftop Restaurant</option>
+                              <option>Napoli's Pizza</option>
+                              <option>Quality Greens Kitchen</option>
+                              <option>Carpe Diem Pub & Restaurant</option>                              
+                              <option>South Street Fish & Ramen Co</option>
+                              <option>Frankie and Avas Italian Eatery</option>
+                              <option>Bin 14</option>
+                              <option>Loquito</option>
+                              <option>Fiore Deli of Hoboken</option>
+                              <option>Green Pear Cafe</option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+
+                        <button type="button" class="btn btn-sm btn-outline-secondary"><input class="btn btn-default" type="submit" value="Submit"></button>
+
+                        </div>
+                        </div>
+                    </form>
+                    {% if error %}
+                         <p class="error"><strong>Error:</strong> {{ error }}</p>
+                    {% endif %}
+
+                  </p>
+
+
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="text-muted">
+      <div class="container">
+        <p class="float-right">
+          <a href="#">Back to top</a>
+        </p>
+        <p>Yelp Reviews Library is &copy;copyright by Sindy Wen </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>

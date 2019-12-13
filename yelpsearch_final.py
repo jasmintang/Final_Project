@@ -1,10 +1,12 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+import numpy as np
 import pandas as pd
 import nltk
 from textblob import TextBlob
 from collections import Counter 
+from sklearn import linear_model
 from flask import Flask, redirect, render_template, request, session, url_for
 
 ## PROCESS DATA
@@ -23,9 +25,38 @@ businesses = parsed["businesses"]
 for business in businesses:
     resturant_name.append(business["name"])
     resturant_id = business["id"]
-    ratings = business["rating"]
-    idandrating.append([resturant_id, ratings])
-database = dict(zip(resturant_name, idandrating))
+    ratings = business["rating"] 
+    results = requests.get("https://api.yelp.com/v3/businesses/" + str(resturant_id) + "/reviews",  headers = headers)
+    parsed = json.loads(results.text)
+    reviews = parsed["reviews"]
+    url = reviews[0]["url"]
+    page_review = requests.get(url)
+    page_soup = BeautifulSoup(page_review.content, features = 'lxml')
+    page_return = page_soup.find_all("span", attrs = {"class":"lemon--span__373c0__3997G","lang" :"en"})
+    allreview = []
+    for perreview in page_return:
+        allreview.append(perreview.text)
+        blobreview = TextBlob(str(allreview).replace(r'\xa0', ' '))  
+    score = blobreview.sentiment.polarity
+    idandrating.append([resturant_id, ratings, score, allreview])  
+
+database = dict(zip(resturant_name, idandrating))   
+
+## PROCESS DATA for SKlearn
+rating_score = [] 
+sentiment_score = [] 
+for i in database.values(): 
+    rating_score.append(i[1]) 
+    sentiment_score.append(((i[2]+1)/2)*5) 
+rating_blob = np.asarray(rating_score).reshape(-1,1) 
+regr = linear_model.LinearRegression() 
+regr.fit(rating_blob.reshape(-1,1), sentiment_score)
+sentment_pred = regr.predict(rating_blob)
+
+index = 0 
+for i in database.keys():
+    database[i].append(sentment_pred[index]) 
+    index += 1
 
 
 ## FLASK
@@ -38,29 +69,15 @@ def yelpsearch():
         # match input restaurant name with database 
         name = request.form['name']
         if name in database.keys():
-            url="https://api.yelp.com/v3/businesses/" + str(database[name][0]) + "/reviews"    
-            results = requests.get(url, headers = headers)
-            parsed = json.loads(results.text)
-            reviews = parsed["reviews"]
-            url = reviews[0]["url"]
-            page_review = requests.get(url)
-            page_soup = BeautifulSoup(page_review.content, features = 'lxml')
-            page_return = page_soup.find_all("span", attrs = {"class":"lemon--span__373c0__3997G","lang" :"en"})
-            allreview = []
-            for perreview in page_return:
-                allreview.append(perreview.text)
-            allreview = str(allreview)
-            allreview = allreview.replace(r'\xa0', ' ')
-            # now we get all reviews of the restaurant you entered
-            
-            # Service 1
-            blob = TextBlob(allreview)
+
+            # Service 1: Translate
+            blob = TextBlob(str(database[name][3]))
             chinese_blob = blob.translate(from_lang='en', to='zh-CN')
 
-            # Service 2
-            score_blob = blob.sentiment.polarity
+            # Service 2: Sentiment Score
+            score_blob = round(database[name][2],2)
 
-            # Service 3
+            # Service 3: Adjective Words
             reviewpos = blob.pos_tags
             adj=[]
             for item in reviewpos:
@@ -68,7 +85,7 @@ def yelpsearch():
                     adj.append(item[0])
             sorted_adj = Counter(adj).most_common(10)
 
-            # Service 4
+            # Service 4: Noun Words
             noun = []
             for item in reviewpos:  
                 if item[1] == "NN":
@@ -94,17 +111,20 @@ def yelpsearch():
             for i in __re_data:
                 key.append(i)
             
-            # Service 5
+            # Service 5: Top 10 Positive Noun Phrases
             for i in range(len(key)):
                 if i > 9:
                     break
                 key1.append(key[i])
             
-            # Service 6
+            # Service 6: Top 10 Negative Noun Phrases
             for i in range(len(key)):
                 if i > 9:
                     break
                 key2.append(key[len(key)-i-1])
+            
+            # Service 7: SKlearn
+            predict_blob = round(database[name][4],2)
 
 
             return render_template('success.html',
@@ -113,7 +133,8 @@ def yelpsearch():
                                    adj=sorted_adj,
                                    noun=sorted_noun,
                                    positive=key1,
-                                   negative=key2)
+                                   negative=key2,
+                                   rate=predict_blob)
     
 
         else:
